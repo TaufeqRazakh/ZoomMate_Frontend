@@ -1,5 +1,9 @@
 <body>
 <script>
-fetch('https://zmate.herokuapp.com/up').then(res => res.json()).then(data => alert(data.name))
+  fetch('https://zmate.herokuapp.com/up', {
+    method: 'GET',
+    mode: 'cors',
+    credentials: 'same-origin'
+  }).then(res => res.json()).then(data => alert(data.name))
 </script>
 </body>
