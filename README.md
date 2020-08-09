@@ -18,3 +18,7 @@ Nesting the block shown below for the suitable time.
   <a href=$ZoomLink>$Class Name</a>
 </div>
 ```  
+
+
+### Credits
++ The calendar was inspired by [Serhioromano's bootstrap calendar](Serhioromano)
