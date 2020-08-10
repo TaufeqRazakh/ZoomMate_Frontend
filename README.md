@@ -4,6 +4,7 @@ A vanilla JS and HTML frontend for ZoomMate
 ## To modify the calendar with JavsScript
 
 + Use the id `weekly-schedule`.
++ Recommend emptying inner html on load
 + Each Calendar entry is a row entry, 
 going from earliest time of the day to the 
 latest time of the day. make each entry for a given time  through:
@@ -22,6 +23,7 @@ Nesting the block shown below for the suitable time.
 ## To midify the available room cards with JavaScript 
 
 + Use the id `in-session-rooms`
++ Recommend emptying inner html on load 
 
 ### Credits
 
