@@ -7,18 +7,22 @@ A vanilla JS and HTML frontend for ZoomMate
 + Each Calendar entry is a row entry, 
 going from earliest time of the day to the 
 latest time of the day. make each entry for a given time  through:
-```
+```html
 <div class="cal-row-fluid">
 </div>
 ``` 
 + To specify the entry day, offset the column entry by cal-offset`n`.
 Nesting the block shown below for the suitable time.  
-```
+```html
 <div class="cal-cell1 cal-offset2 day-highlight dh-event-office-hour" data-event-class="event-info">
   <a href=$ZoomLink>$Class Name</a>
 </div>
 ```  
 
+## To midify the available room cards with JavaScript 
+
++ Use the id `in-session-rooms`
 
 ### Credits
+
 + The calendar was inspired by [Serhioromano's bootstrap calendar](https://github.com/Serhioromano/bootstrap-calendar)
