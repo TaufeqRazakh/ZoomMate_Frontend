@@ -7,8 +7,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="staticBackdropLabel">Classes are now in session</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -20,7 +19,7 @@
                             <div class="card card-info" >
                                 <div class="card-header" >Email Sign In</div>
                                 <div class="card-body" >
-                                    <form >
+                                    <form id="signInForm">
                                         <div class="form-group" >
                                             <label class="control-label" >
                                                 <span >Email</span>
@@ -33,7 +32,7 @@
                                             </label>
                                             <input type="password" name="password" label="Password" placeholder="Enter password..." value="" class="form-control" >
                                         </div>
-                                        <button class="btn btn-primary btn btn-default" type="button" >Sign In</button>
+                                        <button class="btn btn-primary btn btn-default" type="button" onclick="submitSignInForm()">Sign In</button>
                                     </form>
                                     <br >
                                 </div>
@@ -44,7 +43,7 @@
                         <div class="card card-info" >
                             <div class="card-header" >Register by Email</div>
                             <div class="card-body" >
-                                <form >
+                                <form id="signUpForm">
                                     <div class="form-group" >
                                         <label class="control-label" >
                                             <span >Email</span>
@@ -63,7 +62,7 @@
                                         </label>
                                         <input type="password" name="password_confirmation" label="Password Confirmation" placeholder="Enter password again..." value="" class="form-control" >
                                     </div>
-                                    <button class="btn btn-primary btn btn-default" type="button" >Register</button>
+                                    <button class="btn btn-primary btn btn-default" type="button" onclick="submitSignUpForm()">Sign Up</button>
                                 </form>
                             </div>
                         </div>
@@ -72,8 +71,7 @@
                     </body>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Understood</button>
+                Get your zoom lectures, discussions and office hours all in once place
             </div>
         </div>
     </div>
