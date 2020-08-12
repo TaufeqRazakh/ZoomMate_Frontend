@@ -40,7 +40,10 @@ $.auth.configure({
 	handleLoginResponse: function(resp) {
 		console.log("Inside handle Login function");
 		console.log(resp);
-		$('div.modal-backdrop').removeClass('modal-backdrop');
+		$('dismissGreetingModalButton').click();
+		$('body').removeClass('modal-open');
+		$('div.modal-backdrop').remove()
+		$('div.modal-class').remove();
 		showScheduleForUser();
 		return resp.data;
 	},
