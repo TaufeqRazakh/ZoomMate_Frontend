@@ -40,6 +40,7 @@ $.auth.configure({
 	handleLoginResponse: function(resp) {
 		console.log("Inside handle Login function");
 		console.log(resp);
+		$('div.modal-backdrop').removeClass('modal-backdrop');
 		showScheduleForUser();
 		return resp.data;
 	},
@@ -67,7 +68,7 @@ var state ={
 	pastAttempt: false
 };
 
-function showGreetingForm($) {
+function showGreetingForm() {
 	$.ajax({
 		url: 'tmpls/greeting.html',
 		dataType: 'html',
@@ -89,7 +90,6 @@ var options = {
 };
 
 function showScheduleForUser() {
-	$('#closeGreetingModalButton').click();
 	$.ajax({
 		url: 'tmpls/homePage.html',
 		dataType: 'html',
@@ -98,8 +98,8 @@ function showScheduleForUser() {
 		cache: false
 	}).done(function (html) {
 		$('div.container').html(html);
+		$('#calendar').calendar(options);
 	});
-	$('#calendar').calendar(options);
 }
 
 function submitSignInForm() {
@@ -131,7 +131,7 @@ function signOut() {
 		console.log("Cookies found");
 	} else {
 		console.log("No cookies found");
-		showGreetingForm($);
+		showGreetingForm();
 	}
 
 	var options = {
