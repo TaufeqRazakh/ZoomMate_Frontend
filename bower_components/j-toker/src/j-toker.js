@@ -24,25 +24,21 @@
     );
   } else {
     // Browser globals
-    factory(window.jQuery, window.deparam, window.PubSub);
+    factory(jQuery, window.deparam, window.PubSub);
   }
 }(function ($, deparam, PubSub) {
-  var root = Function('return this')(); // jshint ignore:line
-
   // singleton baby
-  if (root.auth) {
-    return root.auth;
+  if ($.auth) {
+    return $.auth;
   }
 
   // use for IE detection
-  var nav = root.navigator;
+  var nav = window.navigator;
 
   // cookie/localStorage value keys
-  var INITIAL_CONFIG_KEY  = 'default',
-      SAVED_CONFIG_KEY    = 'currentConfigName',
-      SAVED_CREDS_KEY     = 'authHeaders',
-      FIRST_TIME_LOGIN    = 'firstTimeLogin',
-      MUST_RESET_PASSWORD = 'mustResetPassword';
+  var INITIAL_CONFIG_KEY = 'default',
+      SAVED_CONFIG_KEY   = 'currentConfigName',
+      SAVED_CREDS_KEY    = 'authHeaders';
 
   // broadcast message event name constants (use constants to avoid typos)
   var VALIDATION_SUCCESS             = 'auth.validation.success',
@@ -73,9 +69,6 @@
   var Auth = function () {
     // set flag so we know when plugin has been configured.
     this.configured = false;
-
-    // create promise for configuration + verification
-    this.configDfd = null;
 
     // configs hash allows for multiple configurations
     this.configs = {};
@@ -111,18 +104,18 @@
       tokenValidationPath:   '/auth/validate_token',
       proxyIf:               function() { return false; },
       proxyUrl:              '/proxy',
+      validateOnPageLoad:    false,
       forceHardRedirect:     false,
       storage:               'cookies',
       cookieExpiry:          14,
       cookiePath:            '/',
-      initialCredentials:    null,
 
       passwordResetSuccessUrl: function() {
-        return root.location.href;
+        return window.location.href;
       },
 
       confirmationSuccessUrl:  function() {
-        return root.location.href;
+        return window.location.href;
       },
 
       tokenFormat: {
@@ -167,11 +160,9 @@
     this.configs           = {};
     this.defaultConfigKey  = null;
     this.configured        = false;
-    this.configDfd         = null;
     this.mustResetPassword = false;
     this.firstTimeLogin    = false;
-    this.oAuthDfd          = null;
-    this.willRedirect      = false;
+    this.oAuthDfd = null;
 
     if (this.oAuthTimer) {
       clearTimeout(this.oAuthTimer);
@@ -186,12 +177,13 @@
     // remove event listeners
     $(document).unbind('ajaxComplete', this.updateAuthCredentials);
 
-    if (root.removeEventListener) {
-      root.removeEventListener('message', this.handlePostMessage);
+    if (window.removeEventListener) {
+      window.removeEventListener('message', this.handlePostMessage);
     }
 
     // remove global ajax "interceptors"
     $.ajaxSetup({beforeSend: undefined});
+
   };
 
 
@@ -210,38 +202,39 @@
   // throw clear errors when dependencies are not met
   Auth.prototype.checkDependencies = function() {
     var errors = [],
-      warnings = [];
+        warnings = [];
 
-      if (!$) {
-        throw 'jToker: jQuery not found. This module depends on jQuery.';
-      }
+    if (!$) {
+      throw 'jToker: jQuery not found. This module depends on jQuery.';
+    }
 
-      if (!root.localStorage && !$.cookie) {
-        errors.push(
-          'This browser does not support localStorage. You must install '+
-            'jquery-cookie to use jToker with this browser.'
-        );
-      }
+    if (!window.localStorage && !$.cookie) {
+      errors.push(
+        'This browser does not support localStorage. You must install '+
+        'jquery-cookie to use jToker with this browser.'
+      );
+    }
 
-      if (!deparam) {
-        errors.push('Dependency not met: jquery-deparam.');
-      }
+    if (!deparam) {
+      errors.push('Dependency not met: jquery-deparam.');
+    }
 
-      if (!PubSub) {
-        warnings.push(
-          'jquery.ba-tinypubsub.js not found. No auth events will be broadcast.'
-        );
-      }
+    if (!PubSub) {
+      warnings.push(
+        'jquery.ba-tinypubsub.js not found. No auth events will be broadcast.'
+      );
+    }
 
-      if (errors.length) {
-        var errMessage = errors.join(' ');
-        throw 'jToker: Please resolve the following errors: ' + errMessage;
-      }
+    if (errors.length) {
+      var errMessage = errors.join(' ');
+      throw 'jToker: Please resolve the following errors: ' + errMessage;
+    }
 
-      if (warnings.length && console && console.warn) {
-        var warnMessage = warnings.join(' ');
-        console.warn('jToker: Warning: ' + warnMessage);
-      }
+    if (warnings.length && console && console.warn) {
+      var warnMessage = warnings.join(' ');
+      console.warn('jToker: Warning: ' + warnMessage);
+    }
+
   };
 
   // need a way to destroy the current session without relying on `getConfig`.
@@ -256,8 +249,8 @@
       key = sessionKeys[key];
 
       // kill all local storage keys
-      if (root.localStorage) {
-        root.localStorage.removeItem(key);
+      if (window.localStorage) {
+        window.localStorage.removeItem(key);
       }
 
       if ($.cookie) {
@@ -269,11 +262,6 @@
             path: cookiePath
           });
         }
-
-        // remove from base path in case config is not specified
-        $.removeCookie(key, {
-          path: "/"
-        });
       }
     }
   };
@@ -283,10 +271,6 @@
     // destroy all session data. useful for testing
     if (reset) {
       this.reset();
-    }
-
-    if (this.configured) {
-      return this.configDfd;
     }
 
     // set flag so configure isn't called again (unless reset)
@@ -332,46 +316,22 @@
     // TODO: add config option for these bindings
     if (true) {
       // update auth creds after each request to the API
-      $(document).ajaxComplete(root.auth.updateAuthCredentials);
+      $(document).ajaxComplete($.auth.updateAuthCredentials);
 
       // intercept requests to the API, append auth headers
-      $.ajaxSetup({beforeSend: root.auth.appendAuthHeaders});
+      $.ajaxSetup({beforeSend: $.auth.appendAuthHeaders});
     }
 
     // IE8 won't have this feature
-    if (root.addEventListener) {
-      root.addEventListener("message", this.handlePostMessage, false);
+    if (window.addEventListener) {
+      window.addEventListener("message", this.handlePostMessage, false);
     }
 
     // pull creds from search bar if available
     this.processSearchParams();
 
-    // don't validate the token if we're just going to redirect anyway.
-    // otherwise the page won't have time to process the response header and
-    // the token may expire before the redirected page can validate.
-    if (this.willRedirect) {
-      return false;
-    }
-
-    // don't validate with the server if the credentials were provided. this is
-    // a case where the validation happened on the server and is being used to
-    // initialize the client.
-    else if (this.getConfig().initialCredentials) {
-      // skip initial headers check (i.e. check was already done server-side)
-      var c = this.getConfig();
-      this.persistData(SAVED_CREDS_KEY, c.initialCredentials.headers);
-      this.persistData(MUST_RESET_PASSWORD, c.initialCredentials.mustResetPassword);
-      this.persistData(FIRST_TIME_LOGIN, c.initialCredentials.firstTimeLogin);
-      this.setCurrentUser(c.initialCredentials.user);
-      return new $.Deferred().resolve(c.initialCredentials.user);
-    }
-
-    // otherwise check with server if any existing tokens are found
-    else {
-      // validate token if set
-      this.configDfd = this.validateToken({config: this.getCurrentConfigName()});
-      return this.configDfd;
-    }
+    // validate token if set
+    return this.validateToken({config: this.getCurrentConfigName()});
   };
 
 
@@ -384,13 +344,13 @@
   // interpolate values of tokenFormat hash with ctx, return new hash
   Auth.prototype.buildAuthHeaders = function(ctx) {
     var headers = {},
-      fmt = this.getConfig().tokenFormat;
+        fmt = this.getConfig().tokenFormat;
 
-      for (var key in fmt) {
-        headers[key] = tmpl(fmt[key], ctx);
-      }
+    for (var key in fmt) {
+      headers[key] = tmpl(fmt[key], ctx);
+    }
 
-      return headers;
+    return headers;
   };
 
 
@@ -416,34 +376,34 @@
     if (ev.data.message === 'deliverCredentials') {
       delete ev.data.message;
 
-      var initialHeaders = root.auth.normalizeTokenKeys(ev.data),
-          authHeaders    = root.auth.buildAuthHeaders(initialHeaders),
-          user           = root.auth.setCurrentUser(ev.data);
+      var initialHeaders = $.auth.normalizeTokenKeys(ev.data),
+          authHeaders    = $.auth.buildAuthHeaders(initialHeaders),
+          user           = $.auth.setCurrentUser(ev.data);
 
-      root.auth.persistData(SAVED_CREDS_KEY, authHeaders);
-      root.auth.resolvePromise(OAUTH_SIGN_IN_SUCCESS, root.auth.oAuthDfd, user);
-      root.auth.broadcastEvent(SIGN_IN_SUCCESS, user);
-      root.auth.broadcastEvent(VALIDATION_SUCCESS, user);
+      $.auth.persistData(SAVED_CREDS_KEY, authHeaders);
+      $.auth.resolvePromise(OAUTH_SIGN_IN_SUCCESS, $.auth.oAuthDfd, user);
+      $.auth.broadcastEvent(SIGN_IN_SUCCESS, user);
+      $.auth.broadcastEvent(VALIDATION_SUCCESS, user);
 
       stopListening = true;
     }
 
     if (ev.data.message === 'authFailure') {
-      root.auth.rejectPromise(
+      $.auth.rejectPromise(
         OAUTH_SIGN_IN_ERROR,
-        root.auth.oAuthDfd,
+        $.auth.oAuthDfd,
         ev.data,
         'OAuth authentication failed.'
       );
 
-      root.auth.broadcastEvent(SIGN_IN_ERROR, ev.data);
+      $.auth.broadcastEvent(SIGN_IN_ERROR, ev.data);
 
       stopListening = true;
     }
 
     if (stopListening) {
-      clearTimeout(root.auth.oAuthTimer);
-      root.auth.oAuthTimer = null;
+      clearTimeout($.auth.oAuthTimer);
+      $.auth.oAuthTimer = null;
     }
   };
 
@@ -494,12 +454,12 @@
 
       // check if user is returning from password reset link
       if (searchParams.reset_password) {
-        this.persistData(MUST_RESET_PASSWORD, true);
+        this.mustResetPassword = true;
       }
 
       // check if user is returning from confirmation email
       if (searchParams.account_confirmation_success) {
-        this.persistData(FIRST_TIME_LOGIN, true);
+        this.firstTimeLogin = true;
       }
 
       // TODO: set uri flag on devise_token_auth for OAuth confirmation
@@ -519,7 +479,6 @@
         'account_confirmation_success'
       ]);
 
-      this.willRedirect = true;
       this.setLocation(newLocation);
     }
 
@@ -537,7 +496,7 @@
     // strip all values from both actual and anchor search params
     var newSearch   = $.param(this.stripKeys(this.getSearchQs(), keys)),
         newAnchorQs = $.param(this.stripKeys(this.getAnchorQs(), keys)),
-        newAnchor   = root.location.hash.split('?')[0];
+        newAnchor   = window.location.hash.split('?')[0];
 
     if (newSearch) {
       newSearch = "?" + newSearch;
@@ -552,12 +511,12 @@
     }
 
     // reconstruct location with stripped auth keys
-    var newLocation = root.location.protocol +
-        '//'+
-        root.location.host+
-        root.location.pathname+
-        newSearch+
-        newAnchor;
+    var newLocation = window.location.protocol +
+                      '//'+
+                      window.location.host+
+                      window.location.pathname+
+                      newSearch+
+                      newAnchor;
 
     return newLocation;
   };
@@ -584,27 +543,22 @@
   // always resolve after 0 timeout to ensure that ajaxComplete callback
   // has run before promise is resolved
   Auth.prototype.resolvePromise = function(evMsg, dfd, data) {
-    var self = this,
-        finished = $.Deferred();
-
+    var self = this;
     setTimeout(function() {
       self.broadcastEvent(evMsg, data);
       dfd.resolve(data);
-      finished.resolve();
     }, 0);
-
-    return finished.promise();
   };
 
 
+  // always reject after 0 timeout to ensure that ajaxComplete callback
+  // has run before promise is rejected
   Auth.prototype.rejectPromise = function(evMsg, dfd, data, reason) {
     var self = this;
 
     // jQuery has a strange way of returning error responses...
-    data = $.parseJSON((data && data.responseText) || '{}');
+    data = $.parseJSON(data.responseText || '{}');
 
-    // always reject after 0 timeout to ensure that ajaxComplete callback
-    // has run before promise is rejected
     setTimeout(function() {
       self.broadcastEvent(evMsg, data);
       dfd.reject({
@@ -612,8 +566,6 @@
         data: data
       });
     }, 0);
-
-    return dfd;
   };
 
 
@@ -621,15 +573,6 @@
   Auth.prototype.validateToken = function(opts) {
     if (!opts) {
       opts = {};
-    }
-
-    if (!opts.config) {
-      opts.config = this.getCurrentConfigName();
-    }
-
-    // if this check is already in progress, return existing promise
-    if (this.configDfd) {
-      return this.configDfd;
     }
 
     var dfd = $.Deferred();
@@ -660,17 +603,12 @@
 
           this.setCurrentUser(user);
 
-          if (this.retrieveData(FIRST_TIME_LOGIN)) {
+          if (this.firstTimeLogin) {
             this.broadcastEvent(EMAIL_CONFIRMATION_SUCCESS, resp);
-            this.persistData(FIRST_TIME_LOGIN, false);
-            this.firstTimeLogin = true;
           }
 
-
-          if (this.retrieveData(MUST_RESET_PASSWORD)) {
+          if (this.mustResetPassword) {
             this.broadcastEvent(PASSWORD_RESET_CONFIRM_SUCCESS, resp);
-            this.persistData(MUST_RESET_PASSWORD, false);
-            this.mustResetPassword = true;
           }
 
           this.resolvePromise(VALIDATION_SUCCESS, dfd, this.user);
@@ -680,15 +618,12 @@
           // clear any saved session data
           this.invalidateTokens();
 
-
-          if (this.retrieveData(FIRST_TIME_LOGIN)) {
+          if (this.firstTimeLogin) {
             this.broadcastEvent(EMAIL_CONFIRMATION_ERROR, resp);
-            this.persistData(FIRST_TIME_LOGIN, false);
           }
 
-          if (this.retrieveData(MUST_RESET_PASSWORD)) {
+          if (this.mustResetPassword) {
             this.broadcastEvent(PASSWORD_RESET_CONFIRM_ERROR, resp);
-            this.persistData(MUST_RESET_PASSWORD, false);
           }
 
           this.rejectPromise(
@@ -798,17 +733,17 @@
   // 2. user fails authentication
   // 3. auth window is closed
   Auth.prototype.listenForCredentials = function(popup) {
-    var self = this;
     if (popup.closed) {
-      self.rejectPromise(
+      this.rejectPromise(
         OAUTH_SIGN_IN_ERROR,
-        self.oAuthDfd,
+        this.oAuthDfd,
         null,
         'OAuth window was closed bofore registration was completed.'
       );
     } else {
+      var self = this;
       popup.postMessage('requestCredentials', '*');
-      self.oAuthTimer = setTimeout(function() {
+      this.oAuthTimer = setTimeout(function() {
         self.listenForCredentials(popup);
       }, 500);
     }
@@ -816,7 +751,7 @@
 
 
   Auth.prototype.openAuthWindow = function(url) {
-    if (this.getConfig().forceHardRedirect || root.isIE()) {
+    if (this.getConfig().forceHardRedirect || window.isIE()) {
       // redirect to external auth provider. credentials should be
       // provided in location search hash upon return
       this.setLocation(url);
@@ -831,10 +766,9 @@
 
 
   Auth.prototype.buildOAuthUrl = function(configName, params, providerPath) {
-    var oAuthUrl = this.getConfig().apiUrl + providerPath +
-        '?auth_origin_url='+encodeURIComponent(root.location.href) +
-        '&config_name='+encodeURIComponent(configName || this.getCurrentConfigName()) +
-        "&omniauth_window_type=newWindow";
+      var oAuthUrl = this.getConfig().apiUrl + providerPath +
+          '?auth_origin_url='+encodeURIComponent(window.location.href) +
+          '&config_name='+encodeURIComponent(configName || this.getCurrentConfigName());
 
     if (params) {
       for(var key in params) {
@@ -1070,15 +1004,15 @@
     val = JSON.stringify(val);
 
     switch (this.getConfig(config).storage) {
-      case 'localStorage':
-        root.localStorage.setItem(key, val);
-        break;
-
-      default:
+      case 'cookies':
         $.cookie(key, val, {
           expires: this.getConfig(config).cookieExpiry,
           path:    this.getConfig(config).cookiePath
         });
+        break;
+
+      default:
+        window.localStorage.setItem(key, val);
         break;
     }
   };
@@ -1089,12 +1023,12 @@
     var val = null;
 
     switch (this.getConfig().storage) {
-      case 'localStorage':
-        val = root.localStorage.getItem(key);
+      case 'cookies':
+        val = $.cookie(key);
         break;
 
       default:
-        val = $.cookie(key);
+        val = window.localStorage.getItem(key);
         break;
     }
 
@@ -1125,8 +1059,8 @@
       configName = $.cookie(SAVED_CONFIG_KEY);
     }
 
-    if (root.localStorage && !configName) {
-      configName = root.localStorage.getItem(SAVED_CONFIG_KEY);
+    if (window.localStorage && !configName) {
+      configName = window.localStorage.getItem(SAVED_CONFIG_KEY);
     }
 
     configName = configName || this.defaultConfigKey || INITIAL_CONFIG_KEY;
@@ -1145,7 +1079,7 @@
         break;
 
       default:
-        root.localStorage.removeItem(key);
+        window.localStorage.removeItem(key);
         break;
     }
   };
@@ -1171,7 +1105,7 @@
   // send auth credentials with all requests to the API
   Auth.prototype.appendAuthHeaders = function(xhr, settings) {
     // fetch current auth headers from storage
-    var currentHeaders = root.auth.retrieveData(SAVED_CREDS_KEY);
+    var currentHeaders = $.auth.retrieveData(SAVED_CREDS_KEY);
 
     // check config apiUrl matches the current request url
     if (isApiRequest(settings.url) && currentHeaders) {
@@ -1183,7 +1117,7 @@
       );
 
       // set header for each key in `tokenFormat` config
-      for (var key in root.auth.getConfig().tokenFormat) {
+      for (var key in $.auth.getConfig().tokenFormat) {
         xhr.setRequestHeader(key, currentHeaders[key]);
       }
     }
@@ -1202,7 +1136,7 @@
       var blankHeaders = true;
 
       // set header key + val for each key in `tokenFormat` config
-      for (var key in root.auth.getConfig().tokenFormat) {
+      for (var key in $.auth.getConfig().tokenFormat) {
         newHeaders[key] = xhr.getResponseHeader(key);
 
         if (newHeaders[key]) {
@@ -1212,7 +1146,7 @@
 
       // persist headers for next request
       if (!blankHeaders) {
-        root.auth.persistData(SAVED_CREDS_KEY, newHeaders);
+        $.auth.persistData(SAVED_CREDS_KEY, newHeaders);
       }
     }
   };
@@ -1220,18 +1154,18 @@
 
   // stub for mock overrides
   Auth.prototype.getRawSearch = function() {
-    return root.location.search;
+    return window.location.search;
   };
 
 
   // stub for mock overrides
   Auth.prototype.getRawAnchor = function() {
-    return root.location.hash;
+    return window.location.hash;
   };
 
 
   Auth.prototype.setRawAnchor = function(a) {
-    root.location.hash = a;
+    window.location.hash = a;
   };
 
 
@@ -1243,7 +1177,7 @@
 
   // stub for mock overrides
   Auth.prototype.setRawSearch = function(s) {
-    root.location.search = s;
+    window.location.search = s;
   };
 
 
@@ -1262,19 +1196,19 @@
 
   // stub for mock overrides
   Auth.prototype.setLocation = function(url) {
-    root.location.replace(url);
+    window.location.replace(url);
   };
 
 
   // stub for mock overrides
   Auth.prototype.createPopup = function(url) {
-    return root.open(url);
+    return window.open(url);
   };
 
 
   Auth.prototype.getSearchQs = function() {
-    var qs    = this.getRawSearch().replace('?', ''),
-        qsObj = (qs) ? deparam(qs) : {};
+    var qs          = this.getRawSearch().replace('?', ''),
+        qsObj       = (qs) ? deparam(qs) : {};
 
     return qsObj;
   };
@@ -1308,7 +1242,7 @@
 
 
   var isApiRequest = function(url) {
-    return (url.match(root.auth.getApiUrl()));
+    return (url.match($.auth.getApiUrl()));
   };
 
 
@@ -1316,9 +1250,9 @@
   // http://stackoverflow.com/questions/14879866/javascript-templating-function-replace-string-and-dont-take-care-of-whitespace
   var tmpl = function(str, obj) {
     var replacer = function(wholeMatch, key) {
-      return obj[key] === undefined ? wholeMatch : obj[key];
-    },
-    regexp = new RegExp('{{\\s*([a-z0-9-_]+)\\s*}}',"ig");
+          return obj[key] === undefined ? wholeMatch : obj[key];
+        },
+        regexp = new RegExp('{{\\s*([a-z0-9-_]+)\\s*}}',"ig");
 
     for(var beforeReplace = ""; beforeReplace !== str; str = (beforeReplace = str).replace(regexp, replacer)){
 
@@ -1328,7 +1262,7 @@
 
 
   // check if IE < 10
-  root.isOldIE = function() {
+  window.isOldIE = function() {
     var oldIE = false,
         ua    = nav.userAgent.toLowerCase();
 
@@ -1344,8 +1278,8 @@
 
 
   // check if using IE
-  root.isIE = function() {
-    var ieLTE10 = root.isOldIE(),
+  window.isIE = function() {
+    var ieLTE10 = window.isOldIE(),
         ie11    = !!nav.userAgent.match(/Trident.*rv\:11\./);
 
     return (ieLTE10 || ie11);
@@ -1353,7 +1287,8 @@
 
 
   // export service
-  root.auth = $.auth = new Auth();
+  $.auth = new Auth();
 
-  return root.auth;
+  return $.auth;
+
 }));

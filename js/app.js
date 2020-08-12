@@ -15,7 +15,9 @@
 		day: '2013-03-12'
 	};
 
+	console.log("hello");
 	var calendar = $('#calendar').calendar(options);
 
+	console.log("hello");
 
 }(jQuery));
