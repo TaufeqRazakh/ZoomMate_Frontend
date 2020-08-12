@@ -21,6 +21,7 @@ $.auth.configure({
 	},
 
 	confirmationSuccessUrl:  function() {
+		console.log("Returned from confirmation success");
 		return window.location.href;
 	},
 
@@ -37,14 +38,19 @@ $.auth.configure({
 	},
 
 	handleLoginResponse: function(resp) {
+		console.log("Inside handle Login function");
+		console.log(resp);
+		showScheduleForUser();
 		return resp.data;
 	},
 
 	handleAccountUpdateResponse: function(resp) {
+		console.log("Inside handle Update function");
 		return resp.data;
 	},
 
 	handleTokenValidationResponse: function(resp) {
+		console.log("Inside handle Valid Token function");
 		return resp.data;
 	},
 
@@ -63,15 +69,37 @@ var state ={
 
 function showGreetingForm($) {
 	$.ajax({
-		url: 'tmpls/Greeting.html',
+		url: 'tmpls/greeting.html',
 		dataType: 'html',
 		type: 'GET',
 		async: false,
 		cache: false
 	}).done(function (html) {
 		$('div.container').html(html);
-		$('#greetingModalButton').click();
+		$('#openGreetingModalButton').click();
 	});
+}
+
+var options = {
+	events_source: 'events.json.php',
+	view: 'week',
+	tmpl_path: 'tmpls/',
+	tmpl_cache: false,
+	day: '2020-08-11'
+};
+
+function showScheduleForUser() {
+	$('#closeGreetingModalButton').click();
+	$.ajax({
+		url: 'tmpls/homePage.html',
+		dataType: 'html',
+		type: 'GET',
+		async: false,
+		cache: false
+	}).done(function (html) {
+		$('div.container').html(html);
+	});
+	$('#calendar').calendar(options);
 }
 
 function submitSignInForm() {

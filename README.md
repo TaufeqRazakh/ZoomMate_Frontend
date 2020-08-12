@@ -1,24 +1,17 @@
 # ZoomMate_Frontend
 A vanilla JS and HTML frontend for ZoomMate
 
++ to build on heroku change the apiUrl value in js/app.js
+
++ Register with a user name and password for the fors time
+
++ Sign in with the previously created username and password
+
++ You will be directed to the homepage 
+
 ## To modify the calendar with JavsScript
 
-+ Use the id `weekly-schedule`.
-+ Recommend emptying inner html on load
-+ Each Calendar entry is a row entry, 
-going from earliest time of the day to the 
-latest time of the day. make each entry for a given time  through:
-```html
-<div class="cal-row-fluid">
-</div>
-``` 
-+ To specify the entry day, offset the column entry by cal-offset`n`.
-Nesting the block shown below for the suitable time.  
-```html
-<div class="cal-cell1 cal-offset2 day-highlight dh-event-office-hour" data-event-class="event-info">
-  <a href=$ZoomLink>$Class Name</a>
-</div>
-```  
+
 
 ## To midify the available room cards with JavaScript 
 
