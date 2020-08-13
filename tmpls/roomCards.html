@@ -1,10 +1,12 @@
+<% _.each(allRoomData, function(roomData){ %>
 <div class="card mb-3">
     <div class="card-header">
-        Quantum mechanics
+        <%= roomData.courseId%>
     </div>
     <div class="card-body">
-        <h5 class="card-title">Created by Jackson 1 hr ago</h5>
-        <div class="card-text float-left">Seats 5, Occupied by 2</div>
-        <a href="#" class="btn btn-primary float-right">Request to join</a>
+        <h5 class="card-title"><%= roomData.purpose %></h5>
+        <div class="card-text float-left">Seats <%= roomData.capacity %>, Occupied by <%= roomData.occupants %></div>
+        <a href="<%= roomData.url %>" class="btn btn-primary float-right">Request to join</a><br/>
     </div>
 </div>
+<% }); %>

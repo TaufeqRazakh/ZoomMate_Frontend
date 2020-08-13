@@ -152,6 +152,17 @@ function showUserCalendar(userId, apiUrl) {
 
 function showAvailableRooms() {
 	// Load template for card
+
+	var t = {};
+	var roomData = {};
+	roomData.capacity = 7;
+	roomData.occupants = 2;
+	roomData.url = "https://example.com";
+	roomData.purpose = "Informal group Study";
+	roomData.courseId = "Combinatorial Logic";
+	var allRoomData = [roomData, roomData];
+	t.allRoomData = allRoomData;
+
 	$.ajax({
 		url: 'tmpls/roomCards.html',
 		dataType: 'html',
@@ -159,7 +170,7 @@ function showAvailableRooms() {
 		async: false,
 		cache: false
 	}).done(function (html) {
-		$('div#rooms').html(html);
+		$('div#rooms').html(_.template(html)(t));
 	});
 }
 
