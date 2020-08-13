@@ -101,14 +101,51 @@ var options = {
 			"title": "Lecture CS596",
 			"url": "http://www.example.com/",
 			"class": "event-warning",
-			"start": "1597174200000",
-			"end":   "1597181400000"
+			"start": "1597098600000",
+			"end":   "1597102200000"
 		},
+
 		{
-			"id": "295",
-			"title": "Discussion CS596",
+			"id": "393",
+			"title": "Lecture CS455",
 			"url": "http://www.example.com/",
-			"class": "event-important",
+			"class": "event-warning",
+			"start": "1597249800000",
+			"end":   "1597253400000"
+		},
+
+		{
+			"id": "294",
+			"title": "Lecture CS596",
+			"url": "http://www.example.com/",
+			"class": "event-warning",
+			"start": "1597271400000",
+			"end":   "1597275000000"
+		},
+
+		{
+			"id": "394",
+			"title": "Lecture CS455",
+			"url": "http://www.example.com/",
+			"class": "event-warning",
+			"start": "1597336200000",
+			"end":   "1597339800000"
+		},
+
+		{
+			"id": "290",
+			"title": "Office Hours CS596",
+			"url": "http://www.example.com/",
+			"class": "event-info",
+			"start": "1597473000000",
+			"end":   "1597455000000"
+		},
+
+		{
+			"id": "390",
+			"title": "Office Hours CS455",
+			"url": "http://www.example.com/",
+			"class": "event-info",
 			"start": "1597473000000",
 			"end":   "1597455000000"
 		}
