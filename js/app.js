@@ -1,3 +1,15 @@
+var userSession = {
+	apiUrl: 'http://localhost:3000',
+	id: 999,
+	goToHomepage : function () {
+		$('dismissGreetingModalButton').click();
+		$('body').removeClass('modal-open');
+		$('div.modal-backdrop').remove();
+		$('div.modal-class').remove();
+		showScheduleForUser(this.id, this.apiUrl);
+	}
+};
+
 $.auth.configure({
 	apiUrl: 'http://localhost:3000',
 	signOutPath:           '/auth/sign_out',
@@ -40,11 +52,8 @@ $.auth.configure({
 	handleLoginResponse: function(resp) {
 		console.log("Inside handle Login function");
 		console.log(resp);
-		$('dismissGreetingModalButton').click();
-		$('body').removeClass('modal-open');
-		$('div.modal-backdrop').remove()
-		$('div.modal-class').remove();
-		showScheduleForUser();
+		$.extend(userSession, resp.data);
+		userSession.goToHomepage();
 		return resp.data;
 	},
 
@@ -85,14 +94,32 @@ function showGreetingForm() {
 }
 
 var options = {
-	events_source: 'events.json.php',
+	// events_source: 'events.json.php',
+	events_source: [
+		{
+			"id": "293",
+			"title": "Lecture CS596",
+			"url": "http://www.example.com/",
+			"class": "event-warning",
+			"start": "1597174200000",
+			"end":   "1597181400000"
+		},
+		{
+			"id": "295",
+			"title": "Discussion CS596",
+			"url": "http://www.example.com/",
+			"class": "event-important",
+			"start": "1597473000000",
+			"end":   "1597455000000"
+		}
+	],
 	view: 'week',
 	tmpl_path: 'tmpls/',
 	tmpl_cache: false,
 	day: '2020-08-11'
 };
 
-function showScheduleForUser() {
+function showScheduleForUser(userId, apiUrl) {
 	$.ajax({
 		url: 'tmpls/homePage.html',
 		dataType: 'html',
@@ -101,7 +128,22 @@ function showScheduleForUser() {
 		cache: false
 	}).done(function (html) {
 		$('div.container').html(html);
-		$('#calendar').calendar(options);
+
+		console.log('about to get classes for user to place into calendar', userId);
+		// $.ajax({
+		// 	url: apiUrl + '/courses' + userId + '/enroll',
+		// 	dataType: 'json',
+		// 	type: 'POST',
+		// 	headers: { 'Content-Type': 'application/json' },
+		// 	data: {'user_id': userId},
+		// 	async: 'false',
+		// 	cache: 'true',
+		// }).done(function (json) {
+		// 	options.events_source = json;
+			$('#calendar').calendar(options);
+		// });
+	}).fail(function () {
+		showGreetingForm();
 	});
 }
 
@@ -126,6 +168,7 @@ function submitSignUpForm() {
 
 function signOut() {
 	$.auth.signOut();
+	showGreetingForm();
 }
 
 (function($) {

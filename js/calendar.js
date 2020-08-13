@@ -945,16 +945,20 @@ if(!String.prototype.formatNum) {
 		var loader;
 		switch($.type(source)) {
 			case 'function':
+				console.log('Case matched with the function source type');
 				loader = function() {
 					return source(self.options.position.start, self.options.position.end, browser_timezone);
 				};
 				break;
 			case 'array':
 				loader = function() {
+					console.log('Case matched with the array source type');
+
 					return [].concat(source);
 				};
 				break;
 			case 'string':
+				console.log('Case matched with the string source type');
 				if(source.length) {
 					loader = function() {
 						var events = [];
