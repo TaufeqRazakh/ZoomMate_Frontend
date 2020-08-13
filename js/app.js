@@ -6,7 +6,7 @@ var userSession = {
 		$('body').removeClass('modal-open');
 		$('div.modal-backdrop').remove();
 		$('div.modal-class').remove();
-		showScheduleForUser(this.id, this.apiUrl);
+		showUserCalendar(this.id, this.apiUrl);
 	}
 };
 
@@ -119,7 +119,8 @@ var options = {
 	day: '2020-08-11'
 };
 
-function showScheduleForUser(userId, apiUrl) {
+function showUserCalendar(userId, apiUrl) {
+	// Load template for calendar
 	$.ajax({
 		url: 'tmpls/homePage.html',
 		dataType: 'html',
@@ -141,9 +142,24 @@ function showScheduleForUser(userId, apiUrl) {
 		// }).done(function (json) {
 		// 	options.events_source = json;
 			$('#calendar').calendar(options);
+			showAvailableRooms();
 		// });
+
 	}).fail(function () {
 		showGreetingForm();
+	});
+}
+
+function showAvailableRooms() {
+	// Load template for card
+	$.ajax({
+		url: 'tmpls/roomCards.html',
+		dataType: 'html',
+		type: 'GET',
+		async: false,
+		cache: false
+	}).done(function (html) {
+		$('div#rooms').html(html);
 	});
 }
 
