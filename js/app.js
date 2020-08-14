@@ -1,5 +1,5 @@
 var userSession = {
-	apiUrl: 'http://localhost:3000',
+	apiUrl: 'https://zmate.herokuapp.com',
 	id: 999,
 	goToHomepage : function () {
 		$('dismissGreetingModalButton').click();
@@ -11,7 +11,8 @@ var userSession = {
 };
 
 $.auth.configure({
-	apiUrl: 'http://localhost:3000',
+	apiUrl: 'https://zmate.herokuapp.com',
+	// apiUrl: 'http://localhost:300',
 	signOutPath:           '/auth/sign_out',
 	emailSignInPath:       '/auth/sign_in',
 	emailRegistrationPath: '/auth',
