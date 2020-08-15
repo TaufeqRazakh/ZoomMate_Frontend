@@ -12,7 +12,6 @@ var userSession = {
 
 $.auth.configure({
 	apiUrl: 'https://zmate.herokuapp.com',
-	// apiUrl: 'http://localhost:300',
 	signOutPath:           '/auth/sign_out',
 	emailSignInPath:       '/auth/sign_in',
 	emailRegistrationPath: '/auth',
@@ -75,7 +74,6 @@ $.auth.configure({
 	}
 });
 
-"use strict";
 var state ={
 	loggedIn: false,
 	pastAttempt: false
@@ -94,71 +92,8 @@ function showGreetingForm() {
 	});
 }
 
-var options = {
-	// events_source: 'events.json.php',
-	events_source: [
-		{
-			"id": "293",
-			"title": "Lecture CS596",
-			"url": "http://www.example.com/",
-			"class": "event-warning",
-			"start": "1597098600000",
-			"end":   "1597102200000"
-		},
-
-		{
-			"id": "393",
-			"title": "Lecture CS455",
-			"url": "http://www.example.com/",
-			"class": "event-warning",
-			"start": "1597249800000",
-			"end":   "1597253400000"
-		},
-
-		{
-			"id": "294",
-			"title": "Lecture CS596",
-			"url": "http://www.example.com/",
-			"class": "event-warning",
-			"start": "1597271400000",
-			"end":   "1597275000000"
-		},
-
-		{
-			"id": "394",
-			"title": "Lecture CS455",
-			"url": "http://www.example.com/",
-			"class": "event-warning",
-			"start": "1597336200000",
-			"end":   "1597339800000"
-		},
-
-		{
-			"id": "290",
-			"title": "Office Hours CS596",
-			"url": "http://www.example.com/",
-			"class": "event-info",
-			"start": "1597473000000",
-			"end":   "1597455000000"
-		},
-
-		{
-			"id": "390",
-			"title": "Office Hours CS455",
-			"url": "http://www.example.com/",
-			"class": "event-info",
-			"start": "1597473000000",
-			"end":   "1597455000000"
-		}
-	],
-	view: 'week',
-	tmpl_path: 'tmpls/',
-	tmpl_cache: false,
-	day: '2020-08-11'
-};
-
 function showUserCalendar(userId, apiUrl) {
-	// Load template for calendar
+	// Load template for homepage
 	$.ajax({
 		url: 'tmpls/homePage.html',
 		dataType: 'html',
@@ -167,22 +102,6 @@ function showUserCalendar(userId, apiUrl) {
 		cache: false
 	}).done(function (html) {
 		$('div.container').html(html);
-
-		console.log('about to get classes for user to place into calendar', userId);
-		// $.ajax({
-		// 	url: apiUrl + '/courses' + userId + '/enroll',
-		// 	dataType: 'json',
-		// 	type: 'POST',
-		// 	headers: { 'Content-Type': 'application/json' },
-		// 	data: {'user_id': userId},
-		// 	async: 'false',
-		// 	cache: 'true',
-		// }).done(function (json) {
-		// 	options.events_source = json;
-			$('#calendar').calendar(options);
-			showAvailableRooms();
-		// });
-
 	}).fail(function () {
 		showGreetingForm();
 	});
@@ -244,19 +163,4 @@ function signOut() {
 		console.log("No cookies found");
 		showGreetingForm();
 	}
-
-	var options = {
-		events_source: 'events.json.php',
-		view: 'week',
-		tmpl_path: 'tmpls/',
-		tmpl_cache: false,
-		day: '2020-08-11'
-	};
-
-	if(state.loggedIn) {
-		console.log("before calendar render");
-		var calendar = $('#calendar').calendar(options);
-		console.log("after calendar render");
-	}
-
 }(jQuery));

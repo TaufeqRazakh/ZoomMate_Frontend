@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "j-toker": "^0.0.10-beta3",
+    "underscore": "^1.10.2"
+  }
+}
