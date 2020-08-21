@@ -102,6 +102,15 @@ function showUserCalendar(userId, apiUrl) {
 		cache: false
 	}).done(function (html) {
 		$('div.container').html(html);
+		$('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        defaultView: 'month',
+        defaultDate: '2016-03-01'
+    })
 	}).fail(function () {
 		showGreetingForm();
 	});
