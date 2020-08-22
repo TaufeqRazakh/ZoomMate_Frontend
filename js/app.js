@@ -92,6 +92,8 @@ function showGreetingForm() {
 	});
 }
 
+const dateToday = moment().format("YYYY-MM-DD");
+
 function showUserCalendar(userId, apiUrl) {
 	// Load template for homepage
 	$.ajax({
@@ -108,8 +110,8 @@ function showUserCalendar(userId, apiUrl) {
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
-        defaultView: 'month',
-        defaultDate: '2016-03-01'
+        defaultView: 'agendaWeek',
+        defaultDate: dateToday
     })
 	}).fail(function () {
 		showGreetingForm();
