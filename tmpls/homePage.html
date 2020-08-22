@@ -15,8 +15,7 @@
     <h1>Okay Zoomer!</h1>
     <h6>Oh you just wait, it'll be a thing......and when it does, we called it</h6>
 </div>
-<h7>Date/Time:</h7>
-<p id="datetime"></p>
+
 <div class="row">
     <div class="col-md-12">
         <div id="calendar"></div>
@@ -28,46 +27,45 @@
 <div class="row">
     <div class="col-md-12">
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createRoomModal">
+        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#createRoomModal">
             Create a room
         </button>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="createRoomModal" tabindex="-1" role="dialog" aria-labelledby="createRoomModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createRoomModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form action="action_page.php">
+                        <label for="Name">Name</label>
+                        <input type="text" id="Name" name="Name" placeholder="Your name..">
 
-        <!-- Modal -->
-        <div class="modal fade" id="createRoomModal" tabindex="-1" role="dialog" aria-labelledby="createRoomModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createRoomModalLabel">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <form action="action_page.php">
-                                <label for="Name">Name</label>
-                                <input type="text" id="Name" name="Name" placeholder="Your name..">
+                        <label for="Room Owner">Professor/Student Name</label>
+                        <input type="text" id="Room Owner" name="Room Owner" placeholder="Owner's Name">
 
-                                <label for="Room Owner">Professor/Student Name</label>
-                                <input type="text" id="Room Owner" name="Room Owner" placeholder="Owner's Name">
+                        <label for="Class">Class</label>
+                        <input type="text" id="Class" name="Class" placeholder="Class">
+                        <label for="">Available Rooms</label>
+                        <textarea id="Available Rooms" name="Available Rooms" placeholder="Rooms that are available.." style="height:200px"></textarea>
 
-                                <label for="Class">Class</label>
-                                <input type="text" id="Class" name="Class" placeholder="Class">
-                                <label for="">Available Rooms</label>
-                                <textarea id="Available Rooms" name="Available Rooms" placeholder="Rooms that are available.." style="height:200px"></textarea>
+                        <input type="submit" value="Submit">
 
-                                <input type="submit" value="Submit">
-
-                            </form>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-
+                    </form>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
         </div>
     </div>
 </div>
