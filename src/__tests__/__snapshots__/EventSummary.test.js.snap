@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render an event summary card 1`] = `
+<div
+  className="col-md-4"
+>
+  <a
+    className="event-card-link"
+    href="/events/1"
+  >
+    <div
+      className="mb-4 event-card card"
+    >
+      <img
+        className="card-img-top"
+        src="event.png"
+      />
+      <div
+        className="card-body"
+      >
+        <p
+          className="event-card-datetime card-text"
+        >
+          Thu, Sep 10, 2020 10:00 AM 
+        </p>
+        <div
+          className="card-title h5"
+        >
+          My Test Event
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+`;
