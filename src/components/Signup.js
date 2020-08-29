@@ -9,7 +9,7 @@ class Signup extends React.Component {
     e.preventDefault()
     axios({
       method: 'POST',
-      url: 'http://localhost:3001/auth',
+      url: 'https://zmate.herokuapp.com/auth',
       data: {
         email: this.email.value,
         password: this.password.value

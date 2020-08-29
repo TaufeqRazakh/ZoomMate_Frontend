@@ -7,7 +7,7 @@ const handleSignOut = function(e) {
   e.preventDefault();
   axios({
     method: 'DELETE',
-    url: 'http://localhost:3001/auth/sign_out',
+    url: 'https://zmate.herokuapp.com/auth/sign_out',
     data: JSON.parse(localStorage.user)
   })
   .then(() => {

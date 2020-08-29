@@ -1,15 +1,23 @@
 import React from 'react'
+import LoginErrors from './LoginErrors'
 import axios from 'axios'
 import Form from 'react-bootstrap/Form'
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 
 class Login extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      loginErrors: false
+    }
+  }
+
   handleLogin = (e) => {
     e.preventDefault()
     axios({
       method: 'POST',
-      url: 'http://localhost:3001/auth/sign_in',
+      url: 'https://zmate.herokuapp.com/auth/sign_in',
       data: {
         email: this.email.value,
         password: this.password.value
@@ -24,12 +32,17 @@ class Login extends React.Component {
       }))
       window.location = '/'
     })
+        .catch( error => {
+            console.log(error);
+            this.setState({loginErrors: true})
+        })
   }
 
   render () {
     return (
       <Container className="content-container">
         <h2>Log in</h2>
+        <LoginErrors loginErrors = {this.state.loginErrors}></LoginErrors>
         <Form onSubmit={this.handleLogin}>
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>

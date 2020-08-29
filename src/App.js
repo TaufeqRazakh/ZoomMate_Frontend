@@ -2,7 +2,7 @@ import React from 'react'
 import Login from './components/Login'
 import Signup from './components/Signup'
 import AppHeader from './components/AppHeader'
-import Eventlite from './components/Eventlite'
+import ZmateCalendar from './components/ZmateCalendar'
 import Event from './components/Event'
 import EventForm from './components/EventForm'
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
@@ -15,7 +15,7 @@ function App() {
         <AppHeader />
       </Route>
       <Route exact path="/">
-        <Eventlite />
+        <ZmateCalendar />
       </Route>
       <Route exact path="/events/:id">
         <Event/>

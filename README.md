@@ -1,8 +1,8 @@
-# Eventlite Frontend React App
+# ZmateCalendar Frontend React App
 
 This is an Eventbrite clone, built as part of [The Complete React on Rails course and book](https://learnetto.com/users/hrishio/courses/react-rails-course) on [Learnetto](https://learnetto.com) by Hrishi Mittal.
 
-This app provides the frontend user interface for the [Eventlite Backend Rails API](https://github.com/learnetto/eventlite/tree/rails-api).
+This app provides the frontend user interface for the [ZmateCalendar Backend Rails API](https://github.com/learnetto/eventlite/tree/rails-api).
 
 ## How to run
 
