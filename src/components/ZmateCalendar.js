@@ -1,6 +1,6 @@
 import React from 'react'
-import axios from 'axios'
-import EventForm from './EventForm'
+// import axios from 'axios'
+// import EventForm from './EventForm'
 import './Eventlite.css'
 import Container from 'react-bootstrap/Container'
 import FullCalendar from '@fullcalendar/react'
