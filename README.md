@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c3f0d08a-6c3e-4a0b-94a6-9370cf0bbfc4/deploy-status)](https://app.netlify.com/sites/gifted-galileo-517037/deploys)
+
 # ZmateCalendar Frontend React App
 
 This is an Eventbrite clone, built as part of [The Complete React on Rails course and book](https://learnetto.com/users/hrishio/courses/react-rails-course) on [Learnetto](https://learnetto.com) by Hrishi Mittal.
