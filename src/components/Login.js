@@ -17,7 +17,7 @@ class Login extends React.Component {
     e.preventDefault()
     axios({
       method: 'POST',
-      url: 'https://zmate.herokuapp.com/auth/sign_in',
+      url: 'https://zmate2.herokuapp.com/auth/sign_in',
       data: {
         email: this.email.value,
         password: this.password.value
